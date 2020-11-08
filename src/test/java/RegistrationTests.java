@@ -47,13 +47,9 @@ public class RegistrationTests extends BaseDriver {
         WelcomePage welcomePage = new WelcomePage(driver);
         welcomePage.clickNewRegister();
 
-//        WebDriverWait wait = new WebDriverWait(driver, 5);
-//        wait.
-//        driver.wait(5000);
-        //Thread.sleep(5000);
-
-
-
+        synchronized (driver) {
+            driver.wait(5000);
+        }
 
 
         Set<String> contextNames = driver.getContextHandles();
@@ -61,14 +57,10 @@ public class RegistrationTests extends BaseDriver {
             System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
         }
 
-        //driver.context("WEBVIEW_com.car2go");
-        //Set<String> contextNames = driver.getContextHandles();
-        driver.context((String) contextNames.toArray()[1]);
-        //RegistrationFormPage registrationFormPage = new RegistrationFormPage(driver);
-        //registrationFormPage.typeEmail("rr@rr.rr");
+        driver.context("WEBVIEW_com.car2go");
+        //driver.context((String) contextNames.toArray()[1]);
 
         RegistrationFormPage registrationFormPage = new RegistrationFormPage(driver);
-        registrationFormPage.typeEmail2("rr@rr.rr");
-        //registrationFormPage.clickSelectCountry();
+        registrationFormPage.typeEmail("rr@rr.rr");
     }
 }
