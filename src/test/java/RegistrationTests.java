@@ -1,10 +1,8 @@
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import page_object.Android.MainPage;
-import page_object.Android.MenuPage;
-import page_object.Android.RegistrationFormPage;
-import page_object.Android.WelcomePage;
+import page_object.Android.*;
 
 import java.util.Set;
 
@@ -15,13 +13,13 @@ public class RegistrationTests extends BaseDriver {
         prepareAndroidForAppium();
     }
 
-//    @AfterClass
-//    public static void tearDown() throws Exception {
-//        driver.quit();
-//    }
+    @AfterClass
+    public static void tearDown() throws Exception {
+    //TODO: Remove also test data from DB
+        driver.quit();
+    }
 
-
-    //● User can see register button from Menu entry (Start Now > Register)
+    // User can see register button from Menu entry (Start Now > Register)
     @Test
     public void registerDisplayedSuccessfull() throws InterruptedException {
         MainPage mainPage = new MainPage(driver);
@@ -35,9 +33,9 @@ public class RegistrationTests extends BaseDriver {
         Assert.assertTrue(welcomePage.isDisplayedRegister());
     }
 
-
+    //User lands on Payment page after saving personal data
     @Test
-    public void typeEmailSuccessfull() throws InterruptedException {
+    public void landsPaymentPageSuccessfull() throws InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickMenu();
 
@@ -47,10 +45,10 @@ public class RegistrationTests extends BaseDriver {
         WelcomePage welcomePage = new WelcomePage(driver);
         welcomePage.clickNewRegister();
 
+        //waiting for the webview to load
         synchronized (driver) {
             driver.wait(5000);
         }
-
 
         Set<String> contextNames = driver.getContextHandles();
         for (String contextName : contextNames) {
@@ -58,9 +56,30 @@ public class RegistrationTests extends BaseDriver {
         }
 
         driver.context("WEBVIEW_com.car2go");
-        //driver.context((String) contextNames.toArray()[1]);
 
         RegistrationFormPage registrationFormPage = new RegistrationFormPage(driver);
-        registrationFormPage.typeEmail("rr@rr.rr");
+
+        //fill the form with correct data
+        registrationFormPage.typeEmail("rr10@rr.rr");
+        registrationFormPage.selectCountry(RegistrationFormPage.Country.FR);
+        registrationFormPage.typePhoneNumber("98767894213");
+        registrationFormPage.selectYourTitle(RegistrationFormPage.Salutation.MRS);
+        registrationFormPage.typeFirstName("Ksenia");
+        registrationFormPage.typeLastName("Krasotina");
+        registrationFormPage.typePassword("45678990");
+        registrationFormPage.typePin("4455");
+
+        //TODO: make more beautiful code: year 2002(2) -> 1926(78), 1978(26)
+        registrationFormPage.selectBirthDate(12,9,26);
+        registrationFormPage.typeBirthPlace("Russia, Novosibirsk");
+        registrationFormPage.typeAddressStreet("Parkhomenko, 00");
+        registrationFormPage.typePostalCode("10179");
+        registrationFormPage.typeTown("Paris");
+
+        registrationFormPage.checkTermsAndConditions();
+        registrationFormPage.clickRegisterNowButton();
+
+        PaymenPage paymentPage = new PaymenPage(driver);
+        Assert.assertTrue(paymentPage.paymenPageFormIsDisplayed());
     }
 }

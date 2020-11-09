@@ -23,9 +23,10 @@ public class WelcomePage {
     @AndroidFindBy(id = "cardNewRegistration")
     private AndroidElement NewRegister;
 
-    public void clickNewRegister() {
+    public void clickNewRegister() throws InterruptedException {
         NewRegister.click();
-    }
+        //driver.wait(1000);
+   }
 
     public boolean isDisplayedRegister() {
         return NewRegister.isDisplayed();
