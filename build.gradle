@@ -27,5 +27,9 @@ dependencies {
     compile group: 'com.android.support.test', name: 'runner', version: '1.0.2'
     compile group: 'com.android.support.test.espresso', name: 'espresso-core', version: '3.0.2'
     testImplementation 'com.android.support.test:runner:1.0.2'
+    testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
+}
 
+test {
+    useJUnitPlatform()
 }

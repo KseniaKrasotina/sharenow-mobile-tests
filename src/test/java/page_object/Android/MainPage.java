@@ -6,6 +6,8 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class MainPage {
     private AndroidDriver<AndroidElement> driver;
 
@@ -14,7 +16,7 @@ public class MainPage {
 
     public MainPage(AndroidDriver<AndroidElement> driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver,10, TimeUnit.SECONDS), this);
     }
 
     @AndroidFindBy(id = "menuItem")

@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class RegistrationFormPage {
     private AndroidDriver driver;
 
@@ -16,7 +18,7 @@ public class RegistrationFormPage {
 
     public RegistrationFormPage(AndroidDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver,10, TimeUnit.SECONDS), this);
     }
 
     @FindBy(xpath = "//select[@name=\"addressCountryIsoCode\"]")
@@ -55,7 +57,6 @@ public class RegistrationFormPage {
     private AndroidElement SelectTitle;
 
     public enum Salutation {
-        //TODO: review
         MR(1),
         MRS(2);
 
@@ -90,7 +91,7 @@ public class RegistrationFormPage {
     @FindBy(xpath = "//input[@name=\"addressCity\"]")
     private AndroidElement AddressCity;
 
-    //TODO: ask developers to create an uniq ID or xpath for the Mobile phone input field and change locator here
+    //TODO: ask developers to create an unique ID or xpath for the Mobile phone input field and change locator here
     @FindBy(xpath = "/html/body/div[1]/div/div/div/div[2]/form/div[3]/camelot-phone/div/div/camelot-input/div/input")
     private AndroidElement MobilePhone;
 
@@ -104,8 +105,6 @@ public class RegistrationFormPage {
     private AndroidElement RegisterNowButton;
 
     public void selectCountry(Country country) {
-        SelectCountry.click();
-        System.out.println(country.getCountryCode());
         var selectedCountry = driver.findElement(By.xpath("//*[@name=\"addressCountryIsoCode\"]/option[" + country.getCountryCode() + "]"));
         selectedCountry.click();
     }
@@ -155,7 +154,6 @@ public class RegistrationFormPage {
     }
 
     public void selectBirthDate(Integer day, Integer month, Integer yearId) {
-        //*[@id="camelot-select-54424"]/option[2]
         var dayBirth = driver.findElement(By.xpath("/html/body/div[1]/div/div/div/div[2]/form/div[3]/camelot-fieldset/fieldset/div/camelot-select[1]/div/div/select/option[" + (day+1) + "]"));
         var monthBirth = driver.findElement(By.xpath("/html/body/div[1]/div/div/div/div[2]/form/div[3]/camelot-fieldset/fieldset/div/camelot-select[2]/div/div/select/option[" + (month+1) + "]"));
         var yearBirth = driver.findElement(By.xpath("/html/body/div[1]/div/div/div/div[2]/form/div[3]/camelot-fieldset/fieldset/div/camelot-select[3]/div/div/select/option["+ yearId +"]"));
@@ -165,9 +163,8 @@ public class RegistrationFormPage {
     }
 
     public void selectYourTitle(Salutation title) {
-        System.out.println(title.getSalutationCode());
-        var selectedCountry = driver.findElement(By.xpath("//*[@name=\"salutation\"]/option[" + title.getSalutationCode() + "]"));
-        selectedCountry.click();
+        var selectedSalutation = driver.findElement(By.xpath("//*[@name=\"salutation\"]/option[" + title.getSalutationCode() + "]"));
+        selectedSalutation.click();
     }
 
     public void typePhoneNumber(String phoneNumber) throws InterruptedException {
@@ -177,14 +174,6 @@ public class RegistrationFormPage {
         }
         MobilePhone.sendKeys(phoneNumber);
     }
-
-//    public void typeFiscalCode(String fiscalCode) throws InterruptedException {
-//        FiscalCode.clear();
-//        synchronized (driver) {
-//            driver.wait(1000);
-//        }
-//        FiscalCode.sendKeys(fiscalCode);
-//    }
 
     public void checkTermsAndConditions() throws InterruptedException {
         synchronized (driver) {

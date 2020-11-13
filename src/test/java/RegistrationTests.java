@@ -1,27 +1,35 @@
-import org.junit.AfterClass;
+import jdk.jfr.Description;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import page_object.Android.*;
 
 import java.util.Set;
 
 public class RegistrationTests extends BaseDriver {
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
+        if(driver != null) driver.quit();
         prepareAndroidForAppium();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
-    //TODO: Remove also test data from DB
+    // After each test we close the driver. It makes tests independent from each other, but slower.
+    // Alternative approach:
+    // we can keep the driver running, but in this case we have to restart the app or at least navigate to the home screen after each test.
+    @AfterEach
+    public void tearDown() throws Exception {
+    //TODO: Remove test data from DB as well
+        synchronized (driver) {
+            driver.wait(2000);
+        }
         driver.quit();
     }
 
-    // User can see register button from Menu entry (Start Now > Register)
     @Test
-    public void registerDisplayedSuccessfull() throws InterruptedException {
+    @Description("1. User can see register button from Menu entry (Start Now > Register)")
+    public void registerDisplayedSuccessful() throws InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickMenu();
 
@@ -33,9 +41,9 @@ public class RegistrationTests extends BaseDriver {
         Assert.assertTrue(welcomePage.isDisplayedRegister());
     }
 
-    //User lands on Payment page after saving personal data
     @Test
-    public void landsPaymentPageSuccessfull() throws InterruptedException {
+    @Description("2. User lands on Payment page after saving personal data")
+    public void landsPaymentPageSuccessful() throws InterruptedException {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickMenu();
 
@@ -47,12 +55,12 @@ public class RegistrationTests extends BaseDriver {
 
         //waiting for the webview to load
         synchronized (driver) {
-            driver.wait(5000);
+            driver.wait(2000);
         }
 
         Set<String> contextNames = driver.getContextHandles();
         for (String contextName : contextNames) {
-            System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
+            System.out.println(contextName);
         }
 
         driver.context("WEBVIEW_com.car2go");
@@ -60,16 +68,16 @@ public class RegistrationTests extends BaseDriver {
         RegistrationFormPage registrationFormPage = new RegistrationFormPage(driver);
 
         //fill the form with correct data
-        registrationFormPage.typeEmail("rr10@rr.rr");
+        registrationFormPage.typeEmail("rr11@rr.rr");
         registrationFormPage.selectCountry(RegistrationFormPage.Country.FR);
-        registrationFormPage.typePhoneNumber("98767894213");
+        registrationFormPage.typePhoneNumber("111111111111111");
         registrationFormPage.selectYourTitle(RegistrationFormPage.Salutation.MRS);
         registrationFormPage.typeFirstName("Ksenia");
         registrationFormPage.typeLastName("Krasotina");
         registrationFormPage.typePassword("45678990");
         registrationFormPage.typePin("4455");
 
-        //TODO: make more beautiful code: year 2002(2) -> 1926(78), 1978(26)
+        //TODO: make more clean code: year 2002(2) -> 1926(78), 1978(26)
         registrationFormPage.selectBirthDate(12,9,26);
         registrationFormPage.typeBirthPlace("Russia, Novosibirsk");
         registrationFormPage.typeAddressStreet("Parkhomenko, 00");

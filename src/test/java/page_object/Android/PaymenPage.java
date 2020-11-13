@@ -5,6 +5,8 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.concurrent.TimeUnit;
+
 public class PaymenPage {
     private AndroidDriver driver;
 
@@ -13,7 +15,7 @@ public class PaymenPage {
 
     public PaymenPage(AndroidDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver,10, TimeUnit.SECONDS), this);
     }
 
     public boolean paymenPageFormIsDisplayed() {

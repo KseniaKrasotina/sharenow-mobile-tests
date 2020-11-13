@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 public class WelcomePage {
     private AndroidDriver<AndroidElement> driver;
 
@@ -17,7 +19,7 @@ public class WelcomePage {
 
     public WelcomePage(AndroidDriver<AndroidElement> driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver,10, TimeUnit.SECONDS), this);
     }
 
     @AndroidFindBy(id = "cardNewRegistration")
