@@ -3,6 +3,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 
@@ -13,7 +14,8 @@ public class BaseDriver {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("appium-version", "1.18.3");
         capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("app", "/Users/kkrasotina/ShareNow-tests/bin/com.car2go_4.24.2(562089)_arm64-v8a,armeabi-v7a,x86,x86_64.apk");
+        var apkPath = Paths.get("").toAbsolutePath().toString() + "/bin/com.car2go_4.24.2(562089)_arm64-v8a,armeabi-v7a,x86,x86_64.apk";
+        capabilities.setCapability("app", "apkPath"); //here path from jenkins can be added
         capabilities.setCapability("appPackage", "com.car2go");
         capabilities.setCapability("autoGrantPermissions", true);
 
